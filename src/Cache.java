@@ -9,7 +9,6 @@ public class Cache {
 	private int misses = 0;
 	private int offsetBits = 0;
 	private int indexBits = 0;
-	
 	public Cache(int associativity, int blocks, int blockSize) {
 		this.associativity = associativity;
 		this.offsetBits = (int)(Math.log(blocks)/Math.log(2));
@@ -50,6 +49,7 @@ public class Cache {
 				}
 			}
 		}
+		misses ++;
 		return NOT_IN_CACHE;
 	}
 	
@@ -61,8 +61,12 @@ public class Cache {
 			for(int i=0;i<indexBits; i++) {
 					indexIfInCache += (Math.pow(2, i)* ((indexAndTag >> i) & 1));
 			}
+			if(associativity != DIRECT_MAPPED_CACHE) {
+				int randomEntry  = (int)(Math.random() * associativity);
+				indexIfInCache += randomEntry;
+			}
 			cache[indexIfInCache].setTag(indexAndTag >> indexBits);
-			cache[indexIfInCache].setIsValid(true);
+			cache[indexIfInCache].setIsValid(true);			
 		}
 	}
 	
