@@ -14,8 +14,21 @@ public class CPU {
 		this.l3 = l3;
 	}
 	
-	public void execute(Instruction instruction) {
+	public int execute(Instruction instructionToExecute) {
+		int timeToExecute = 0;
 		instructionsExecutedThusFar ++;
+		timeToExecute += readInstruction(instructionToExecute.getInstructionAddress());
+		if(instructionToExecute.isRead()) {
+			timeToExecute += readData(instructionToExecute.getDataAddress());
+		} else {
+			timeToExecute += writeData(instructionToExecute.getDataAddress());
+		}
+		return timeToExecute;
+		
+	}
+	
+	public int writeData(int dataAddress) {
+		return 0;
 	}
 	
 	public int getNumberOfInstructionsExecuted() {
@@ -47,4 +60,6 @@ public class CPU {
 		}
 		return timeToRead;
 	}
+	
+	
 }
