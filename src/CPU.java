@@ -18,7 +18,7 @@ public class CPU {
 		int timeToExecute = 0;
 		instructionsExecutedThusFar ++;
 		timeToExecute += readInstruction(instructionToExecute.getInstructionAddress());
-		if(instructionToExecute.isRead()) {
+		if(instructionToExecute.getAccessMemory()) {
 			timeToExecute += readData(instructionToExecute.getDataAddress());
 		} else {
 			timeToExecute += writeData(instructionToExecute.getDataAddress());

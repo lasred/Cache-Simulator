@@ -1,0 +1,13 @@
+Cache Line/Block size:16
+L1d/L1i	size:32
+L1d/L1d	latency:1
+L2 size:512
+L2 latency:10
+L3 size:2048
+L3 latency:35
+1LM size:16
+1LM latency:100
+2LM size:1
+2LM Latency:250 400
+Cache Associativity:1
+Write Policy:Writeback
