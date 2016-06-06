@@ -9,7 +9,10 @@ public class Cache {
 	private int misses = 0;
 	private int offsetBits = 0;
 	private int indexBits = 0;
-	public Cache(int associativity, int blocks, int blockSize) {
+	//in nanoseconds
+	private int latency;
+	
+	public Cache(int associativity, int blocks, int blockSize, int latency) {
 		this.associativity = associativity;
 		this.offsetBits = (int)(Math.log(blocks)/Math.log(2));
 		if(associativity == DIRECT_MAPPED_CACHE) {
@@ -17,13 +20,19 @@ public class Cache {
 		} else {
 			indexBits = (int)(Math.log(blocks/associativity)/Math.log(2));
 		}
-		
+	}
+	
+	public int getLatency() {
+		return latency;
 	}
 	
 	public int getHits() {
 		return accesses - misses;
 	}
 	
+	public CacheLine getCacheLine(int index) {
+		return cache[index];
+	}
 
 	public int indexOfCache(int address) {
 		accesses ++;
