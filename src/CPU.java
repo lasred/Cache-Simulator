@@ -7,11 +7,11 @@ public class CPU {
 	private Cache l3;
 	
 	private int instructionsExecutedThusFar;
-	public CPU() {
+	public CPU(Cache l3) {
 		Cache l1d = new Cache(1, 4096, 16, 1);
 		Cache l1i = new Cache(1, 4096, 16, 2);
 		Cache l2 = new Cache(1, 512, 16, 10);
-
+		this.l3 = l3;
 	}
 	
 	public void execute(Instruction instruction) {
@@ -22,12 +22,29 @@ public class CPU {
 		return instructionsExecutedThusFar;
 	}
 	
-	public void readInstruction(int address) {
-		int indexInCache = l1i.indexOfCache(address);
-		if(indexInCache == Cache.NOT_IN_CACHE) {
-			l1i.insertData(address);
-		} else {
-			CacheLine data = l1i.getCacheLine(indexInCache);
+	public int readInstruction(int address) {
+		return read(address, l1i);
+	}
+	
+	public int readData(int address) {
+		return read(address, l1d);
+	}
+	
+	public int read(int address, Cache l1Cache) {
+		int timeToRead = 0;
+		timeToRead += l1Cache.getLatency();
+		if(l1Cache.indexOfCache(address) != Cache.NOT_IN_CACHE) {
+			return timeToRead;
+		} 
+		timeToRead += l2.getLatency();
+		//try l2 cache
+		if(l2.indexOfCache(address) != Cache.NOT_IN_CACHE) {
+			return timeToRead;
 		}
+		timeToRead += l3.getLatency();
+		if(l3.indexOfCache(address) != Cache.NOT_IN_CACHE) {
+			return timeToRead;
+		}
+		return timeToRead;
 	}
 }
