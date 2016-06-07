@@ -37,8 +37,7 @@ public class CPU {
 	
 	public int readInstruction(int address) {
 		return read(address, l1i);
-	}
-	
+	}	
 	public int readData(int address) {
 		return read(address, l1d);
 	}
@@ -61,5 +60,7 @@ public class CPU {
 		return timeToRead;
 	}
 	
-	
+	public void evictCacheLine(CacheLine toEvict) {
+		
+	}
 }

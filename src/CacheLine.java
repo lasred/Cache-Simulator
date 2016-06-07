@@ -4,6 +4,7 @@ public class CacheLine {
 		MODIFIED, EXCLUSIVE, SHARED, INVALID;
 	}
 	
+	private int dirtyBit;
 	private int tag;
 	
 	private boolean isValid;
@@ -13,6 +14,7 @@ public class CacheLine {
 	public CacheLine() {
 		this.tag = 0;
 		this.isValid = false;
+		mesiState = MESIState.EXCLUSIVE;
 	}
 	
 	public void setMesiState(MESIState mesiState) {
