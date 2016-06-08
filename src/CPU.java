@@ -1,3 +1,4 @@
+import java.util.Map;
 
 public class CPU {
 	
@@ -7,10 +8,23 @@ public class CPU {
 	private Cache l3;
 	
 	private int instructionsExecutedThusFar;
-	public CPU(Cache l3) {
-		Cache l1d = new Cache(1, 4096, 16, 1);
-		Cache l1i = new Cache(1, 4096, 16, 2);
-		Cache l2 = new Cache(1, 512, 16, 10);
+	public CPU(Cache l3, Map<String, String> config) {
+
+		l1d = new Cache(Integer.parseInt(config.get("Cache Associativity")),
+				 		Integer.parseInt(config.get("L1d/L1i size")),
+				 		Integer.parseInt(config.get("Cache Line/Block size")),
+				 		Integer.parseInt(config.get("L1d/L1i latency")));
+		
+		l1i = new Cache(Integer.parseInt(config.get("Cache Associativity")),
+						Integer.parseInt(config.get("L1d/L1i size")),
+						Integer.parseInt(config.get("Cache Line/Block size")),
+						Integer.parseInt(config.get("L1d/L1i latency")));
+		
+		l2 = new Cache(Integer.parseInt(config.get("Cache Associativity")),
+					   Integer.parseInt(config.get("L2 size")),
+					   Integer.parseInt(config.get("Cache Line/Block size")),
+					   Integer.parseInt(config.get("L2 latency")));
+		
 		this.l3 = l3;
 	}
 	
