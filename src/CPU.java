@@ -8,9 +8,9 @@ public class CPU {
 	
 	private int instructionsExecutedThusFar;
 	public CPU(Cache l3) {
-		Cache l1d = new Cache(1, 4096, 16, 1);
-		Cache l1i = new Cache(1, 4096, 16, 2);
-		Cache l2 = new Cache(1, 512, 16, 10);
+		l1d = new Cache(1, 32, 16, 1);
+		l1i = new Cache(1, 32, 16, 2);
+		l2 = new Cache(1, 512, 16, 10);
 		this.l3 = l3;
 	}
 	
@@ -57,6 +57,15 @@ public class CPU {
 		if(l3.indexOfCache(address) != Cache.NOT_IN_CACHE) {
 			return timeToRead;
 		}
+		//insert into all of the caches if not in either one(1, 2, 3)
+		if(l1Cache == l1i) {
+			l1i.insertData(address);
+		} else {
+			l1d.insertData(address);
+		}
+		l2.insertData(address);
+		l3.insertData(address);
+		
 		return timeToRead;
 	}
 	
