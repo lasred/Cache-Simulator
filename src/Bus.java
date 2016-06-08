@@ -13,11 +13,14 @@ public class Bus {
 	
 	private Memory twoLM;
 	
-	public Bus(CPU c1, CPU c2, Memory oneLM, Memory twoLM) {
-		cpu1 = c1;
-		cpu2 = c2;
+	private String writeScheme;
+	
+	public Bus(CPU c1, CPU c2, Memory oneLM, Memory twoLM, String theWriteScheme) {
+		this.cpu1 = c1;
+		this.cpu2 = c2;
 		this.oneLM = oneLM;
 		this.twoLM  = twoLM;
+		this.writeScheme = theWriteScheme;
 	}
 
 }
