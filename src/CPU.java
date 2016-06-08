@@ -7,7 +7,7 @@ public class CPU {
 	private Cache l3;
 	
 	private int instructionsExecutedThusFar;
-	public CPU(Cache l3) {
+	public CPU(int assoctivity, Cache l3) {
 		l1d = new Cache(1, 32, 16, 1);
 		l1i = new Cache(1, 32, 16, 2);
 		l2 = new Cache(1, 512, 16, 10);
