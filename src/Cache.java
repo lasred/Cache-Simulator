@@ -41,6 +41,10 @@ public class Cache {
 		return cache[index];
 	}
 
+	public boolean cacheLineExist(){
+
+	}
+
 	public int indexOfCache(int address) {
 		accesses++;
 		//if it were in the cache
@@ -82,5 +86,4 @@ public class Cache {
 		cache[indexIfInCache].setTag(indexAndTag >> indexBits);
 		cache[indexIfInCache].setIsValid(true);			
 	}
-	
 }

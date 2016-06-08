@@ -23,4 +23,11 @@ public class Bus {
 		this.writeScheme = theWriteScheme;
 	}
 
+	/**
+	 * Checks the L1 & L2 caches of a CPU for a matching address.
+	 */
+	public void snoopCPU(final CPU theCPU, final String theAddress){
+
+	}
+
 }
