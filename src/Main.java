@@ -18,9 +18,22 @@ public class Main {
 		readTrace("trace-2k.csv", instructions);
 		readConfig("config.txt", config);
 		
-		for (int i = 0; i < instructions.size(); i++) {
-			System.out.println(instructions.get(i));
-		}
+		Cache L3 = new Cache(Integer.parseInt(config.get("Cache Associativity")),
+							 Integer.parseInt(config.get("L3 size")),
+							 Integer.parseInt(config.get("Cache Line/Block size")),
+							 Integer.parseInt(config.get("L3 latency")));
+		
+		CPU firstCPU = new CPU(L3, config);
+		CPU secondCPU = new CPU(L3, config);
+		
+		Memory firstMem = new Memory(Integer.parseInt(config.get("1LM size")),
+									 Integer.parseInt(config.get("1LM latency")));
+		
+		Memory secondMem = new Memory(Integer.parseInt(config.get("2LM size")),
+									  Integer.parseInt(config.get("2LM latency")));
+		
+		
+		Bus bus = new Bus(firstCPU, secondCPU, firstMem, secondMem);
 
 	}
 	
@@ -63,9 +76,6 @@ public class Main {
 			    	}
 			    	String numString = line.substring(line.indexOf(':') + 1, line.length());
 			    	map.put(description, numString);
-//			    	System.out.println(description);
-//			    	System.out.println(numString);
-//			    	System.out.println();
 			    }
 		  }
 		  catch (Exception e) {
