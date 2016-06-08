@@ -68,6 +68,13 @@ public class CPU {
 		
 		return timeToRead;
 	}
+	public Cache getL1iCache(){
+		return l1i;
+	}
+	public Cache getL2Cache(){
+		return l2;
+	}
+	
 	
 	public void evictCacheLine(CacheLine toEvict) {
 		

@@ -34,7 +34,9 @@ public class Cache {
 	public int getHits() {
 		return accesses - misses;
 	}
-	
+	public int getMiss(){
+		return misses;
+	}
 	public CacheLine getCacheLine(int index) {
 		return cache[index];
 	}
@@ -63,25 +65,22 @@ public class Cache {
 				}
 			}
 		}
-		misses ++;
+		misses++;
 		return NOT_IN_CACHE;
 	}
 	
 	public void insertData(int address) {
-		int indexInCache = indexOfCache(address);
-		if(indexInCache == NOT_IN_CACHE) {
-			int indexAndTag = address >> offsetBits;
-			int indexIfInCache = 0;
-			for(int i=0;i<indexBits; i++) {
-					indexIfInCache += (Math.pow(2, i)* ((indexAndTag >> i) & 1));
-			}
-			if(associativity != DIRECT_MAPPED_CACHE) {
-				int randomEntry  = (int)(Math.random() * associativity);
-				indexIfInCache += randomEntry;
-			}
-			cache[indexIfInCache].setTag(indexAndTag >> indexBits);
-			cache[indexIfInCache].setIsValid(true);			
+		int indexAndTag = address >> offsetBits;
+		int indexIfInCache = 0;
+		for(int i=0;i<indexBits; i++) {
+			indexIfInCache += (Math.pow(2, i)* ((indexAndTag >> i) & 1));
 		}
+		if(associativity != DIRECT_MAPPED_CACHE) {
+			int randomEntry  = (int)(Math.random() * associativity);
+			indexIfInCache += randomEntry;
+		}
+		cache[indexIfInCache].setTag(indexAndTag >> indexBits);
+		cache[indexIfInCache].setIsValid(true);			
 	}
 	
 }
