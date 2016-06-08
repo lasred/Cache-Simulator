@@ -33,7 +33,7 @@ public class Main {
 									  Integer.parseInt(config.get("2LM latency")));
 		
 		
-		Bus bus = new Bus(firstCPU, secondCPU, firstMem, secondMem);
+		Bus bus = new Bus(firstCPU, secondCPU, firstMem, secondMem, config.get("Write Policy"));
 
 	}
 	
