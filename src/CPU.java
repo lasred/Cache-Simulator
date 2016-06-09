@@ -244,6 +244,9 @@ public class CPU {
 	public Cache getL2Cache(){
 		return l2;
 	}
+	public Cache getL3Cache() {
+		return l3;
+	}
 
 
 	public void evictCacheLine(CacheLine toEvict) {
