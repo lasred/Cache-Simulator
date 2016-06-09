@@ -84,7 +84,7 @@ public class CPU {
 			l2.setCacheLineState(L3_state,L2_index); // Set L2's state -> L3's state
 			return timeToRead;
 		}
-		timeToRead += Bus.snoopReadCPU(this, address);
+		timeToRead += Bus.snoopReadCPU(this, address, 'i');
 
 		return timeToRead;
 	}
@@ -126,7 +126,7 @@ public class CPU {
 			// Set state and increase time.
 			return timeToRead;
 		}
-		timeToRead += Bus.snoopReadCPU(this, address);
+		timeToRead += Bus.snoopReadCPU(this, address, 'd');
 
 		return timeToRead;
 	}
@@ -247,6 +247,8 @@ public class CPU {
 	public Cache getL3Cache() {
 		return l3;
 	}
+
+
 
 
 	public void evictCacheLine(CacheLine toEvict) {

@@ -4,6 +4,7 @@ public class Memory {
 	private int size;
 	private int latency;
 	private int numOfWrites;
+	private int numOfReads;
 	private int accesses;
 	private int memoryLeft;
 	
@@ -23,6 +24,16 @@ public class Memory {
 		}
 		return result;
 	}
+
+	public boolean readToMemory(int address) {
+		boolean result = false;
+		if (address < size) { // 32 bits for each address.
+			result = true;
+			numOfReads++;
+		}
+		return result;
+	}
+
 	
 	public boolean isFull() {
 		return !(memoryLeft >= 4);
