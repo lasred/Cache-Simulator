@@ -1,6 +1,6 @@
 Cache Line/Block size:16
-L1d/L1i	size:32
-L1d/L1i	latency:1
+L1d/L1i size:32
+L1d/L1i latency:1
 L2 size:512
 L2 latency:10
 L3 size:2048

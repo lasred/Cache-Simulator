@@ -34,7 +34,8 @@ public class Main {
 		
 		
 		Bus bus = new Bus(firstCPU, secondCPU, firstMem, secondMem, config.get("Write Policy"));
-
+		int[][] mesiStates =    { {1,2,3,4},{5,6,7,8}, {1,2,3,4}, {5,6,7,8}};
+		writeMesiTransation(mesiStates);
 	}
 	
 	private static void readTrace(String filename, List<Instruction> list) {
@@ -69,13 +70,14 @@ public class Main {
 			    String line;
 			    while ((line = reader.readLine()) != null) {
 			    	String description = line.substring(0, line.indexOf(':'));
-			    	if (description.equals("2LM Latency")) {
+			    	if (description.equals("2LM latency")) {
 			    		String numString = line.substring(line.indexOf(':') + 1, line.length());
 			    		String[] splited = numString.split("\\s+");
-			    		map.put(description, splited[0] + " " + splited[1]);
+			    		map.put(description, splited[0]);
+			    	} else {
+				    	String numString = line.substring(line.indexOf(':') + 1, line.length());
+				    	map.put(description, numString);
 			    	}
-			    	String numString = line.substring(line.indexOf(':') + 1, line.length());
-			    	map.put(description, numString);
 			    }
 		  }
 		  catch (Exception e) {
@@ -99,5 +101,15 @@ public class Main {
 		System.out.println("Memory Access Count: " + mem1.getAccess());
 		System.out.println("Memory Access Count: " + mem2.getAccess());
 	}
-
+	public static void writeMesiTransation(int[][] mesiStat){
+		char [] mesilebel = {'M', 'E', 'S', 'I'};
+		System.out.println("  M   E  S  I");
+		for(int i = 0 ;i < 4; i++){
+			System.out.print(mesilebel[i]);
+			for(int j = 0; j < 4; j++){
+				System.out.print(" "+ mesiStat[i][j]+" ");
+			}
+			System.out.println();
+		}
+	}
 }
