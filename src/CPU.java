@@ -6,7 +6,7 @@ public class CPU {
 	private Cache l1i;
 	private Cache l2;
 	private Cache l3;
-	
+	private String name;
 	private int instructionsExecutedThusFar;
 	
 	public CPU(int associativity, Cache l3) {
@@ -14,7 +14,7 @@ public class CPU {
 		l1i = new Cache(1, 32, 16, 2);
 		l2 = new Cache(1, 512, 16, 10);
 	}
-	public CPU(Cache l3, Map<String, String> config) {
+	public CPU(Cache l3, Map<String, String> config, String theName) {
 
 		l1d = new Cache(Integer.parseInt(config.get("Cache Associativity")),
 						Integer.parseInt(config.get("L1d/L1i size")),
@@ -31,6 +31,12 @@ public class CPU {
 					   Integer.parseInt(config.get("Cache Line/Block size")),
 					   Integer.parseInt(config.get("L2 latency")));
 		this.l3 = l3;
+		this.name = theName;
+	}
+	
+	public String getName() {
+		if (this.name != null) return name;
+		return "";
 	}
 
 	public int execute(Instruction instructionToExecute) {

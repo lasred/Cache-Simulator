@@ -23,8 +23,8 @@ public class Main {
 							 Integer.parseInt(config.get("Cache Line/Block size")),
 							 Integer.parseInt(config.get("L3 latency")));
 		
-		CPU firstCPU = new CPU(L3, config);
-		CPU secondCPU = new CPU(L3, config);
+		CPU firstCPU = new CPU(L3, config, "cpu1");
+		CPU secondCPU = new CPU(L3, config, "cpu2");
 		
 		Memory firstMem = new Memory(Integer.parseInt(config.get("1LM size")),
 									 Integer.parseInt(config.get("1LM latency")));
