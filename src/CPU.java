@@ -14,8 +14,8 @@ public class CPU {
 		l1i = new Cache(1, 32, 16, 2);
 		l2 = new Cache(1, 512, 16, 10);
 	}
+	
 	public CPU(Cache l3, Map<String, String> config, String theName) {
-
 		l1d = new Cache(Integer.parseInt(config.get("Cache Associativity")),
 						Integer.parseInt(config.get("L1d/L1i size")),
 						Integer.parseInt(config.get("Cache Line/Block size")),

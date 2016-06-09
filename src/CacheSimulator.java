@@ -7,7 +7,7 @@ public class CacheSimulator {
 		CPU cpuTwo = new CPU(1, sharedL3Cache);
 		Memory memoryOne = new Memory(16000, 100);
 		Memory memoryTwo = new Memory(1000000, 250);
-		Bus cacheSimulatorBus = new Bus(cpuOne, cpuTwo, memoryOne, memoryTwo);
+		Bus cacheSimulatorBus = new Bus(cpuOne, cpuTwo, memoryOne, memoryTwo, "");
 		System.out.println(cpuOne.readInstruction(512));
 		System.out.println(cpuOne.readInstruction(512));
 		System.out.println(cpuOne.readInstruction(1536));

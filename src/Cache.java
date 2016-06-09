@@ -94,6 +94,7 @@ public class Cache {
 	public boolean isCacheLineValid(int index){
 		return cache[index].isValid();
 	}
+	
 
 	/**
 	 * Checks if cacheline at given index is exclusive.
@@ -133,6 +134,7 @@ public class Cache {
 	public void setCacheLineState(CacheLine.MESIState theState, int theIndex){
 		cache[theIndex].setState(theState);
 	}
+}
 
 //	/**
 //	 * Sets cachline from a given index to an SHARED state.
@@ -160,4 +162,4 @@ public class Cache {
 //	public void setCacheLineInvalid(int index){
 //		cache[index].setInvalid();
 //	}
-}
+

@@ -83,5 +83,21 @@ public class Main {
 		    e.printStackTrace();
 		  }
 	}
+	public static void wrintStatistics(Cache L1i, Cache L1d, Cache  L2, Cache L3, Memory mem1, Memory mem2 ){
+		int l1iAccess =  L1i.getHits() + L1i.getMiss();
+		int l1dAccess = L1d.getHits()  + L1d.getMiss();
+		int l2Access = L2.getHits()  + L2.getMiss();
+		int l3Access = L3.getHits()  + L3.getMiss();
+		System.out.println("L1i Access Count: " + l1iAccess);
+		System.out.println("L1i Miss: " + L1i.getMiss() + " L1i  Hit: " + L1i.getHits());
+		System.out.println("L1d Access Count: " + l1dAccess);
+		System.out.println("L1d Miss: " + L1d.getMiss() + " L1d  Hit: " + L1d.getHits());
+		System.out.println("L2 Access Count: " + l2Access);
+		System.out.println("L2 Miss: " + L2.getMiss() + " L2  Hit: " + L2.getHits());
+		System.out.println("L3 Access Count: " + l3Access);
+		System.out.println("L3 Miss: " + L3.getMiss() + " L3  Hit: " + L3.getHits());
+		System.out.println("Memory Access Count: " + mem1.getAccess());
+		System.out.println("Memory Access Count: " + mem2.getAccess());
+	}
 
 }
