@@ -1,3 +1,5 @@
+
+
 /**
  * Bus - transfers data between components of a computer
  * @author chris
@@ -5,9 +7,9 @@
  */
 public class Bus {
 	
-	private CPU cpu1;
+	private static CPU cpu1;
 	
-	private CPU cpu2;
+	private static CPU cpu2;
 	
 	private Memory oneLM;
 	
@@ -34,8 +36,10 @@ public class Bus {
 		
 		if (theCPU.getName().equals("cpu1")) {
 			firstCPU = theCPU;
+			secondCPU = cpu2;
 		} else {
-			secondCPU = theCPU;
+			secondCPU = cpu1;
+			firstCPU = theCPU;
 		}
 
 		return time;
@@ -48,8 +52,15 @@ public class Bus {
 		
 		if (theCPU.getName().equals("cpu1")) {
 			firstCPU = theCPU;
+			secondCPU = cpu2;
 		} else {
-			secondCPU = theCPU;
+			secondCPU = cpu1;
+			firstCPU = theCPU;
+		}
+		
+		// Check if second cpu's L1 has the address. 
+		if (secondCPU.getL1dCache().indexOfCache(theAddress) != Cache.NOT_IN_CACHE) {
+			//firstCPU.get
 		}
 
 		return time;
@@ -62,11 +73,36 @@ public class Bus {
 		
 		if (theCPU.getName().equals("cpu1")) {
 			firstCPU = theCPU;
+			secondCPU = cpu2;
 		} else {
-			secondCPU = theCPU;
+			secondCPU = cpu1;
+			firstCPU = theCPU;
 		}
 
 		return time;
+	}
+	
+	public static void writeL1(CPU theCPU, int flag, CacheLine.MESIState mesi, int theAddress) { // If flag == 1 then use l1d, else then use l1i
+		Cache L1 ;
+		if (flag == 1) {
+			L1 = theCPU.getL1dCache();
+		} else {
+			L1 = theCPU.getL1iCache();
+		}
+		
+		int index = L1.insertData(theAddress);
+		L1.setCacheLineState(mesi, index);
+	}
+	
+	public static void writeL2(CPU theCPU, CacheLine.MESIState mesi, int theAddress) { 
+		Cache L2 = theCPU.getL2Cache();
+		int index = L2.insertData(theAddress);
+		L2.setCacheLineState(mesi, index);
+	}
+	
+	public static void writeL1andL2(CPU theCPU, int flag, CacheLine.MESIState mesi, int theAddress) { // If flag == 1 then use l1d, else then use l1i
+		writeL1(theCPU, flag, mesi, theAddress);
+		writeL2(theCPU, mesi, theAddress);
 	}
 
 	

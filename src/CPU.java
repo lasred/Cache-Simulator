@@ -238,6 +238,9 @@ public class CPU {
 	public Cache getL1iCache(){
 		return l1i;
 	}
+	public Cache getL1dCache() {
+		return l1d;
+	}
 	public Cache getL2Cache(){
 		return l2;
 	}
