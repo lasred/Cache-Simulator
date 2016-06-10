@@ -25,6 +25,14 @@ public class Bus {
 		this.twoLM  = twoLM;
 		this.writeScheme = theWriteScheme;
 	}
+	
+	public void executeOnFirstCPU(Instruction theInstruction) {
+		cpu1.execute(theInstruction);
+	}
+	
+	public void executeOnSecondCPU(Instruction theInstruction) {
+		cpu2.execute(theInstruction);
+	}
 
 	/**
 	 * Snoops the read request; the non-caller CPU checks its L1 and L2 caches for a cachline<br>
@@ -63,6 +71,8 @@ public class Bus {
 			// TODO: memwrite and state change
 			int firstCPU_L1index = firstCPU_Cache.insertData(theAddress);
 			int firstCPU_L2index = firstCPU.getL2Cache().insertData(theAddress);
+			firstCPU.getL3Cache().insertData(theAddress);
+			
 
 			if(secondCPU.getL1dCache().isCacheLineModified(secondCPU_L1index)){
 				Bus.updateCachesState(firstCPU, secondCPU, firstCPU_Cache,
@@ -85,6 +95,7 @@ public class Bus {
 			//TODO: MODIFIED->SHARED
 			int firstCPU_L1index = firstCPU_Cache.insertData(theAddress);
 			int firstCPU_L2index = firstCPU.getL2Cache().insertData(theAddress);
+			firstCPU.getL3Cache().insertData(theAddress);
 
 			if(secondCPU.getL2Cache().isCacheLineModified(secondCPU_L1index)){
 				Bus.updateCachesState(firstCPU, secondCPU, firstCPU_Cache,
@@ -102,7 +113,7 @@ public class Bus {
 		if(oneLM.readToMemory(theAddress)){
 			int firstCPU_L1index = firstCPU_Cache.insertData(theAddress);
 			int firstCPU_L2index = firstCPU.getL2Cache().insertData(theAddress);
-			int indexL3 = firstCPU.getL3Cache().indexOfCache(theAddress);
+			int indexL3 = firstCPU.getL3Cache().insertData(theAddress);
 
 			// INVALID->EXCLUSIVE
 			firstCPU.getL3Cache().setCacheLineState(CacheLine.MESIState.INVALID,indexL3);
@@ -114,7 +125,7 @@ public class Bus {
 		if(twoLM.readToMemory(theAddress)){
 			int firstCPU_L1index = firstCPU_Cache.insertData(theAddress);
 			int firstCPU_L2index = firstCPU.getL2Cache().insertData(theAddress);
-			int indexL3 = firstCPU.getL3Cache().indexOfCache(theAddress);
+			int indexL3 = firstCPU.getL3Cache().insertData(theAddress);
 
 			// INVALID->EXCLUSIVE
 			firstCPU.getL3Cache().setCacheLineState(CacheLine.MESIState.INVALID,indexL3);

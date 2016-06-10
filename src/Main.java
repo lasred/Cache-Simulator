@@ -34,8 +34,21 @@ public class Main {
 		
 		
 		Bus bus = new Bus(firstCPU, secondCPU, firstMem, secondMem, config.get("Write Policy"));
-		int[][] mesiStates =    { {1,2,3,4},{5,6,7,8}, {1,2,3,4}, {5,6,7,8}};
-		writeMesiTransation(mesiStates);
+		int[][] mesiStates =    {{1,2,3,4},{5,6,7,8},{1,2,3,4},{5,6,7,8}};
+		//writeMesiTransation(mesiStates);
+        for(int i = 0; i < 50; i++) {
+        	bus.executeOnFirstCPU(instructions.get(i));
+        }
+        for(int i = 50; i < instructions.size(); i++) {
+        	bus.executeOnFirstCPU(instructions.get(i));
+        	bus.executeOnSecondCPU(instructions.get(i - 50));
+        }
+        int remainingInstructions = instructions.size() - 50;
+        for(int i = remainingInstructions; i < instructions.size(); i++) {
+        	bus.executeOnSecondCPU(instructions.get(i));
+        }
+		writeStatistics(secondCPU.getL1iCache(), secondCPU.getL1dCache(), secondCPU.getL2Cache(), secondCPU.getL3Cache(), firstMem, secondMem);
+		
 	}
 	
 	private static void readTrace(String filename, List<Instruction> list) {
@@ -85,7 +98,7 @@ public class Main {
 		    e.printStackTrace();
 		  }
 	}
-	public static void wrintStatistics(Cache L1i, Cache L1d, Cache  L2, Cache L3, Memory mem1, Memory mem2 ){
+	public static void writeStatistics(Cache L1i, Cache L1d, Cache  L2, Cache L3, Memory mem1, Memory mem2){
 		int l1iAccess =  L1i.getHits() + L1i.getMiss();
 		int l1dAccess = L1d.getHits()  + L1d.getMiss();
 		int l2Access = L2.getHits()  + L2.getMiss();

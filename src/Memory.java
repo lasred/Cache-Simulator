@@ -5,7 +5,6 @@ public class Memory {
 	private int latency;
 	private int numOfWrites;
 	private int numOfReads;
-	private int accesses;
 	private int memoryLeft;
 	
 	public Memory(int size, int latency) {
@@ -44,6 +43,6 @@ public class Memory {
 	}
 	
 	public int getAccess() {
-		return accesses;
+		return numOfWrites + numOfReads;
 	}
 }

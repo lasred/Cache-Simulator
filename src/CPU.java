@@ -9,10 +9,12 @@ public class CPU {
 	private String name;
 	private int instructionsExecutedThusFar;
 	
-	public CPU(int associativity, Cache l3) {
+	public CPU(Cache l3, String theName) {
 		l1d = new Cache(1, 32, 16, 1);
 		l1i = new Cache(1, 32, 16, 2);
 		l2 = new Cache(1, 512, 16, 10);
+		this.l3 = l3;
+		this.name = theName;
 	}
 	
 	public CPU(Cache l3, Map<String, String> config, String theName) {
