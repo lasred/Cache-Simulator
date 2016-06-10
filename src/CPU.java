@@ -62,6 +62,7 @@ public class CPU {
 		timeToRead += l1i.getLatency();
 		// Inspect L1i cache
 		if(l1i.indexOfCache(address) != Cache.NOT_IN_CACHE) { // Is in L1i
+
 			return timeToRead;
 		}
 		timeToRead += l2.getLatency();
@@ -155,8 +156,7 @@ public class CPU {
 				l1d.setCacheLineState(CacheLine.MESIState.MODIFIED, L1d_index);
 				int L2_index = l2.indexOfCache(address);
 				l2.setCacheLineState(CacheLine.MESIState.MODIFIED, L2_index);
-
-				// TODO: Increment EXCLUSIVE->MODIFIED in bus state change counter
+				Main.mesi_state[1][0]++; //EXCLUSIVE->MODIFIED
 			}
 			else if (l1d.isCacheLineShared(L1d_index))
 			{
@@ -164,8 +164,7 @@ public class CPU {
 				l1d.setCacheLineState(CacheLine.MESIState.MODIFIED, L1d_index);
 				int L2_index = l2.indexOfCache(address);
 				l2.setCacheLineState(CacheLine.MESIState.MODIFIED, L2_index);
-
-				// TODO: Increment SHARED->MODIFIED in bus state change counter
+				Main.mesi_state[2][0]++; //SHARED->MODIFIED
 			}
 			return timeToWrite;
 			// Inspect L2 cache
@@ -181,16 +180,14 @@ public class CPU {
 				l2.setCacheLineState(CacheLine.MESIState.MODIFIED, L2_index);
 				L2_index = l2.indexOfCache(address);
 				l2.setCacheLineState(CacheLine.MESIState.MODIFIED, L2_index);
-
-				// TODO: Increment EXCLUSIVE->MODIFIED in bus state change counter
+				Main.mesi_state[1][0]++; //EXCLUSIVE->MODIFIED
 			}
 			else if (l2.isCacheLineShared(L2_index))
 			{
 				timeToWrite += Bus.requestForOwnernship(this, address);
 				L2_index = l2.indexOfCache(address);
 				l2.setCacheLineState(CacheLine.MESIState.MODIFIED, L2_index);
-
-				// TODO: Increment SHARED->MODIFIED in bus state change counter
+				Main.mesi_state[2][0]++; //SHARED->MODIFIED
 			}
 
 			int L1d_index = l1d.insertData(address);

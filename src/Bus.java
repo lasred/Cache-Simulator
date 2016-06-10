@@ -68,21 +68,22 @@ public class Bus {
 		// Inspect CPU2's L1 cache
 		if(secondCPU_L1index != -1){
 			time += writeToMemory(theAddress);
-			// TODO: memwrite and state change
-			int firstCPU_L1index = firstCPU_Cache.insertData(theAddress);
-			int firstCPU_L2index = firstCPU.getL2Cache().insertData(theAddress);
+			// TODO: state change
+			firstCPU_Cache.insertData(theAddress);
+			firstCPU.getL2Cache().insertData(theAddress);
 			firstCPU.getL3Cache().insertData(theAddress);
 			
 
-			if(secondCPU.getL1dCache().isCacheLineModified(secondCPU_L1index)){
+			if(secondCPU_Cache.isCacheLineModified(secondCPU_L1index)){
 				Bus.updateCachesState(firstCPU, secondCPU, firstCPU_Cache,
 									  secondCPU_Cache,CacheLine.MESIState.SHARED,theAddress, true);
 				// TODO: ESCLUSIVE->SHARED
-			}else if(secondCPU.getL1dCache().isCacheLineExclusive(secondCPU_L1index)){
+				secondCPU.getL2Cache().insertData(theAddress);
+			}else if(secondCPU_Cache.isCacheLineExclusive(secondCPU_L1index)){
 				// TODO: ESCLUSIVE->SHARED
 				Bus.updateCachesState(firstCPU, secondCPU, firstCPU_Cache,
 									  secondCPU_Cache,CacheLine.MESIState.SHARED,theAddress, true);
-
+				secondCPU.getL2Cache().insertData(theAddress);
 			}
 			return time;
 		}
@@ -93,15 +94,16 @@ public class Bus {
 		if(secondCPU_L2index != -1){
 			writeToMemory(theAddress);
 			//TODO: MODIFIED->SHARED
-			int firstCPU_L1index = firstCPU_Cache.insertData(theAddress);
-			int firstCPU_L2index = firstCPU.getL2Cache().insertData(theAddress);
+			firstCPU_Cache.insertData(theAddress);
+			firstCPU.getL2Cache().insertData(theAddress);
 			firstCPU.getL3Cache().insertData(theAddress);
 
-			if(secondCPU.getL2Cache().isCacheLineModified(secondCPU_L1index)){
+			if(secondCPU.getL2Cache().isCacheLineModified(secondCPU_L2index)){
 				Bus.updateCachesState(firstCPU, secondCPU, firstCPU_Cache,
 									  secondCPU_Cache,CacheLine.MESIState.SHARED,theAddress, false);
 				// TODO: ESCLUSIVE->SHARED
-			}else if(secondCPU.getL2Cache().isCacheLineExclusive(secondCPU_L1index)){
+
+			}else if(secondCPU.getL2Cache().isCacheLineExclusive(secondCPU_L2index)){
 				// TODO: ESCLUSIVE->SHARED
 				Bus.updateCachesState(firstCPU, secondCPU, firstCPU_Cache,
 									  secondCPU_Cache,CacheLine.MESIState.SHARED,theAddress, false);
@@ -132,7 +134,6 @@ public class Bus {
 			firstCPU_Cache.setCacheLineState(CacheLine.MESIState.INVALID,firstCPU_L1index);
 			firstCPU.getL2Cache().setCacheLineState(CacheLine.MESIState.INVALID,firstCPU_L2index);
 		}
-
 		return time;
 	}
 
@@ -146,19 +147,24 @@ public class Bus {
 			index = CPU2.getL2Cache().indexOfCache(theAddress);
 			CPU2.getL2Cache().setCacheLineState(theState,index);
 		}else{
+			CPU1_L1.insertData(theAddress);
+			index = CPU2_L1.indexOfCache(theAddress);
+			CPU2_L1.setCacheLineState(theState,index);
 			index = CPU2.getL2Cache().indexOfCache(theAddress);
 			CPU2.getL2Cache().setCacheLineState(theState,index);
+			index = CPU2.getL3Cache().indexOfCache(theAddress);
+			CPU2.getL3Cache().setCacheLineState(theState,index);
 		}
 
 		index = CPU1_L1.indexOfCache(theAddress);
 		CPU1_L1.setCacheLineState(theState,index);
 		index = CPU1.getL2Cache().indexOfCache(theAddress);
 		CPU1.getL2Cache().setCacheLineState(theState,index);
+		index = CPU1.getL3Cache().indexOfCache(theAddress);
+		CPU1.getL3Cache().setCacheLineState(theState,index);
 
-		index = CPU2.getL3Cache().indexOfCache(theAddress);
-		CPU2.getL3Cache().setCacheLineState(theState,index);
 	}
-	
+
 	public static int snoopWriteCPU(final CPU theCPU, final int theAddress){
 		int time = 0;
 		CPU firstCPU;
@@ -221,7 +227,7 @@ public class Bus {
 		// Write to the first CPU's cache's.
 		writeL1andL2(firstCPU, 1, CacheLine.MESIState.EXCLUSIVE, theAddress);
 		// Mark L3 as exclusive. 
-		firstCPU.getL3Cache().setCacheLineState(CacheLine.MESIState.EXCLUSIVE, firstCPU.getL3Cache().indexOfCache(theAddress));
+//		firstCPU.getL3Cache().setCacheLineState(CacheLine.MESIState.EXCLUSIVE, firstCPU.getL3Cache().indexOfCache(theAddress));
 		// Add the latency into the time.
 		time += firstCPU.getL1dCache().getLatency() + firstCPU.getL2Cache().getLatency() + firstCPU.getL3Cache().getLatency();
 		return time;
@@ -272,18 +278,6 @@ public class Bus {
 		}
 		return time;
 	}
-
-//	/**
-//	 * Private helper to invalidate a cacheline within a cache.
-//	 *
-//	 * @param theCache the cache being inspected
-//	 * @param theIndex the index for locating the cacheline
-//     * @return the latency for accessing the particular cache
-//     */
-//	private static int invalidateLineInCache(Cache theCache, int theIndex){
-//		theCache.setCacheLineState(CacheLine.MESIState.INVALID, theIndex);
-//		return theCache.getLatency();
-//	}
 	
 	public static void writeL1(CPU theCPU, int flag, CacheLine.MESIState mesi, int theAddress) { // If flag == 1 then use l1d, else then use l1i
 		Cache L1 ;
@@ -306,6 +300,7 @@ public class Bus {
 	public static void writeL3(CPU theCPU, CacheLine.MESIState mesi, int theAddress) { 
 		Cache L3 = theCPU.getL3Cache();
 		int index = L3.insertData(theAddress);
+		System.out.println("Index of L3 cachline: " + index);
 		L3.setCacheLineState(mesi, index);
 	}
 	

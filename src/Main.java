@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Main {
-	
+	public static int[][] mesi_state = new int[4][4];
 	public static void main(String[] args) {
 		
 		List<Instruction> instructions = new ArrayList<Instruction>();

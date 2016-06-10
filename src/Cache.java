@@ -132,6 +132,7 @@ public class Cache {
 	 * @param theIndex the cache index
 	 */
 	public void setCacheLineState(CacheLine.MESIState theState, int theIndex){
+		System.out.println(theIndex);
 		cache[theIndex].setState(theState);
 	}
 }
